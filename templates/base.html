@@ -16,6 +16,8 @@
 
     {% block corecss %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
 
     {% block extra_css %}
@@ -25,6 +27,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/04cda1f084.js" crossorigin="anonymous"></script>
     {% endblock %}
 
     {% block extra_js %}
@@ -34,7 +37,8 @@
   </head>
   <body>
     <header class="container-fruid fixed-top">
-        <div class="row">
+        <!-- To make its background white. Add some padding. And make sure that it's only displayed on large screens -->
+        <div id = "topnav" class="row bg-white pt-lg-2 d-none d-lg-flex">
             <!-- Logo -->
             <!--my-auto py-1 py-lg-0 -> all vertically centred with a bit of top and bottom padding on smaller screens. -->
             <!--logo should be left-aligned on large and extra-large screens. -> text-lg-left -->
