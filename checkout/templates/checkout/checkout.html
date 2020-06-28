@@ -135,3 +135,11 @@
         </div>
     </div>
 {% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <!-- stripe_public_key and client_secret are coming from views.py -->
+    <!-- id_stripe_public_key and id_client_secret become id in script tag-->
+    {{ stripe_public_key|json_script:"id_stripe_public_key" }}
+    {{ client_secret|json_script:"id_client_secret" }}
+{% endblock %}
