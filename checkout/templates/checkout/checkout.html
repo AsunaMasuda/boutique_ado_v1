@@ -24,7 +24,6 @@
                 <hr>
             </div>
         </div>
-
         <div class="row">
             <div class="col-12 col-lg-6 order-lg-last mb-5">
                 <p class="text-muted">Order Summary ({{ product_count }})</p>
@@ -142,4 +141,5 @@
     <!-- id_stripe_public_key and id_client_secret become id in script tag-->
     {{ stripe_public_key|json_script:"id_stripe_public_key" }}
     {{ client_secret|json_script:"id_client_secret" }}
+    <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
 {% endblock %}
