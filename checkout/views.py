@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponse
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
 
@@ -8,6 +9,32 @@ from products.models import Product
 from bag.contexts import bag_contents
 
 import stripe
+import json
+
+
+@require_POST
+def cache_checkout_data(request):
+    """
+    before we call the confirm card payment method in the stripe JavaScrip. 
+    we'll make a post request to this view and give it the client secret from the payment intent.
+    Then I'll set up stripe with the secret key so we can modify the payment intent.
+    To do it all we have to do is call stripe.PaymentIntent.modify
+    give it the pid, and tell it what we want to modify in our case we'll add some metadata.
+    """
+    try:
+        pid = request.POST.get('client_secret').split('_secret')[0]
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe.PaymentIntent.modify(pid, metadata={
+            'bag': json.dumps(request.session.get('bag', {})), # we'll add a JSON dump of their shopping bag which we'll use a little later.
+            'save_info': request.POST.get('save_info'), # whether or not they wanted to save their information.
+            'username': request.user, # who is placing the order
+        })
+        return HttpResponse(status=200)
+        # After adding that stuff all we need to do is return an HTTP response with the status of 200 for okay.
+    except Exception as e:
+        messages.error(request, 'Sorry, your payment cannot be \
+            processed right now. Please try again later.')
+        return HttpResponse(content=e, status=400)
 
 
 def checkout(request):
@@ -103,7 +130,6 @@ def checkout(request):
         messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
 
     # we just need to create an instance of our order form. Which will be empty for now.
-    
     template = 'checkout/checkout.html'
     context = {
         'order_form': order_form,
