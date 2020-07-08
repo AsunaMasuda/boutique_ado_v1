@@ -7,6 +7,7 @@ from django.conf import settings
 from django_countries.fields import CountryField
 
 from products.models import Product
+from profiles.models import UserProfile
 
 # Create your models here.
 class Order(models.Model):
@@ -19,6 +20,13 @@ class Order(models.Model):
     which will automatically set the order date and time whenever a new order is created.
     """
     order_number = models.CharField(max_length=32, null=False, editable=False)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.SET_NULL,
+    # models.SET_NULL if the profile is deleted since that will allow us to keep
+    # an order history in the admin even if the user is deleted.
+    # also allow this to be either null or blank so that users who don't have an
+    # account can still make purchases. Lastly I'll add a related name of orders so we can access
+    # the users orders by calling something like user.userprofile.orders
+                                     null=True, blank=True, related_name='orders')
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
     phone_number = models.CharField(max_length=20, null=False, blank=False)
